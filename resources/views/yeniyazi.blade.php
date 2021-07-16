@@ -15,9 +15,9 @@
         <div class="row">
             @include('layouts.adminmenu')
             <div class="col-md-9">
-            @if (session('mesaj'))
+            @if (session('status'))
                 <div class="alert alert-success" role="alert">
-                   {{session('mesaj')}}
+                   {{__('messages.'.session('status'))}}
                 </div>
                 @endif
                 @if ($errors->any())
@@ -29,23 +29,23 @@
                     </ul>
                 </div>
                 @endif
-                <form action="{{route('yaziekle')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('posts.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-5">
-                            <label for="baslik">Yazı Başlığı</label>
-                            <input type="text" name="yazibaslik" class="form-control" id="baslik" value="{{ old('yazibaslik') }}">
+                            <label for="title">Yazı Başlığı</label>
+                            <input type="text" name="postTitle" class="form-control" id="baslik" value="{{ old('postTitle') }}">
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-5">
-                            <label for="kategori">Yazı Kategorisi</label>
-                            <select id="kategori" name="yazikategori" class="wide">
+                            <label for="category">Yazı Kategorisi</label>
+                            <select id="category" name="postCategory" class="wide">
                                 <option disable value="">Seçiniz</option>
-                                @foreach(App\Models\Kategoriler::all() as $kategori)
-                                <option value="{{$kategori->id}}" @if (old('yazikategori') == $kategori->id)
+                                @foreach($categories as $category)
+                                <option value="{{$category->id}}" @if (old('postCategory') == $category->id)
                                     selected
-                                    @endif > {{ $kategori->ad }} </option>
+                                    @endif > {{ $category->name }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -53,30 +53,30 @@
                     <div class="row mt-3">
                         <div class="col-md-5">
                             <label for="kategori">Yazı Fotoğrafı</label>
-                            <input type="file" name="file" class="form-control" value="{{old('file')}}">
+                            <input type="file" name="postImage" class="form-control" value="{{old('postImage')}}">
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-5">
                             <label for="baslik">Yazı Etiketleri</label>
-                            <input type="text" name="yazietiketler" class="form-control" id="etiketler" value="{{ old('yazietiketler') }}">
+                            <input type="text" name="postTags" class="form-control" id="tags" value="{{ old('postTags') }}">
                             <small>Birden fazla etiket için " , " kullanınız.</small>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-5">
                             <label for="baslik">Yazı Öne Çıkarılsın Mı?</label>
-                            <select class="wide" name="yazionecikarilmis" id="onecikarilmis">
-                                <option value="">Seçiniz</option>
-                                <option value="1">Evet</option>
-                                <option value="0">Hayır</option>
+                            <select class="wide" name="postFeatured" id="featured">
+                                <option disabled value="">Seçiniz</option>
+                                <option {{ old('postFeatured') == 1 ?: 'selected' }} value="1">Evet</option>
+                                <option {{ old('postFeatured') == 0 ?: 'selected' }} value="0">Hayır</option>
                             </select>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-10">
                             <label for="mytextare">İçerik</label>
-                            <textarea name="yaziicerik" id="mytextarea">{{ old('yaziicerik') }}</textarea>
+                            <textarea name="postContent" id="content">{{ old('postContent') }}</textarea>
                         </div>
                     </div>
                     <div class="row mt-3">

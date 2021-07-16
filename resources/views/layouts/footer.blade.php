@@ -26,11 +26,10 @@
 						<div class="widget nav-widget">
 							<h4 class="widget-title">Categories</h4>
 							<ul>
-								<li><a href="#">Lifestyle</a></li>
-								<li><a href="#">Travel</a></li>
-								<li><a href="#">Food & Drinks</a></li>
-								<li><a href="#">Inspiration</a></li>
-								<li><a href="#">Decoration</a></li>
+								@foreach (App\Models\Category::all() as $category)
+								<li><a href="{{ $category->slug }}">{{$category->name}}</a></li>
+								@endforeach
+								
 							</ul>
 						</div>
 					</div>

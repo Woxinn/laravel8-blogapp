@@ -42,11 +42,11 @@
 <div class="col-md-3">
     <ul class="adminlistesi">
         <li><a class="listeli" href="/admin">Kontrol Paneli</a></li>
-        <li><a class="listeli" href="/admin/yeniyazi">Yeni Yazı</a></li>
-        <li><a class="listeli" href="/admin/kategoriler">Kategoriler</a></li>
-        <li><a class="listeli" href="/admin/yazilar">Yazılar</a></li>
-        <li><a class="listeli" href="/admin/kullanicilar">Kullanıcılar</a></li>
-        <li><a class="listeli" href="/admin/ayarlar">Ayarlar</a></li>
+        <li><a class="listeli" href="/admin/posts/create">Yeni Yazı</a></li>
+        <li><a class="listeli" href="/admin/categories">Kategoriler</a></li>
+        <li><a class="listeli" href="/admin/posts">Yazılar</a></li>
+        <li><a class="listeli" href="/admin/users">Kullanıcılar</a></li>
+        <li><a class="listeli" href="/admin/settings">Ayarlar</a></li>
     </ul>
 </div>
 

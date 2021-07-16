@@ -9,17 +9,17 @@
         <div class="row">
             @include('layouts.adminmenu')
             <div class="col-md-8">
-                @if(session('mesaj'))
+                @if(session('status'))
                 <div class="alert alert-success" role="alert">
-                    {{ session('mesaj') }}
+                    {{ __('messages.'.session('status')) }}
                 </div>
                 @endif
-                @isset($duzenleme)
-                @if ($duzenleme==1)
-                <form action="{{route('kategoriler.update',$kategoriid)}}" method="post">
+                @isset($edit)
+                @if ($edit==1)
+                <form action="{{route('categories.update',$category->id)}}" method="post">
                     @csrf
                     @method('PUT')
-                    <input type="text" class="form-control col-md-4" name="yeniad" value="{{$kategoriad->ad}}">
+                    <input type="text" class="form-control col-md-4" name="newCategoryName" value="{{$category->name}}">
                     <button type="submit" class="btn btn-sm btn-primary">Düzenle</button>
                 </form>
                 @endif
@@ -38,10 +38,10 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{route('kategoriler.store')}}" method="post">
+                                <form action="{{route('categories.store')}}" method="post">
                                     @csrf
                                     <div class="col-md-12">
-                                        <input type="text" name="kategoriad" class="form-control" id="ad">
+                                        <input type="text" name="categoryname" class="form-control" id="ad">
                                     </div>
                                     <div class="col-md-12 mt-3">
                                         <input class="btn btn-success" type="submit" value="Ekle">
@@ -65,18 +65,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kategoriler as $kategori)
+                        @foreach ($categories as $category)
                         <tr>
-                            <th scope="row"> {{ $kategori->id }} </th>
-                            <td> {{ $kategori->ad }} </td>
-                            <td> {{ $kategori->slug }} </td>
+                            <th scope="row"> {{ $category->id }} </th>
+                            <td> {{ $category->name }} </td>
+                            <td> {{ $category->slug }} </td>
                             <td>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <a href="{{route('kategoriler.edit',$kategori->id)}}" class="btn btn-sm btn-warning">Düzenle</a>
+                                        <a href="{{route('categories.edit',$category->id)}}" class="btn btn-sm btn-warning">Düzenle</a>
                                     </div>
                                     <div class="col-md-3">
-                                        <form action="{{route('kategoriler.destroy',$kategori->id)}}" method="post">
+                                        <form action="{{route('categories.destroy',$category->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Sil</button>

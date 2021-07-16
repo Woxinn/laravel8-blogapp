@@ -8,26 +8,38 @@
         <div class="row">
             @include('layouts.adminmenu')
             <div class="col-md-8">
-                @if(session('mesaj'))
+                @if(session('status'))
                 <div class="alert alert-success" role="alert">
-                    {{ session('mesaj') }}
+                    {{ __('messages.'.session('status')) }}
                 </div>
                 @endif
-                @isset($duzenleme)
-                @if ($duzenleme==1)
-                <form action="{{route('kullanicilar.update',$kullaniciid)}}" method="post">
-                    @csrf
+               @isset($edit)
+                @if ($edit==1)
+                    <div class="d-flex">
+                    <form action="{{route('users.update',$user->id)}}" method="post">
+                    <div class="row">
+                    @csrf                        
                     @method('PUT')
+                    </div>
+                    <div class="row">                        
+                        <div class="col-md-6">
+                            
                     <select name="kulyetki" class="custom-select" id="">
-                        <option @if (App\Models\User::where('id',$kullaniciid)->first()->yetki == 'kullanici')
+                        <option @if ($user->yetki == 'kullanici')
                             selected
                         @endif value="kullanici">Kullanıcı</option>
-                        <option @if (App\Models\User::where('id',$kullaniciid)->first()->yetki == 'admin')
+                        <option @if ($user->yetki == 'admin')
                             selected
                         @endif value="admin">Admin</option>
                     </select>
+                        </div>
+                        <div class="col-md-6">
+                            
                     <button type="submit" class="btn btn-sm btn-primary">Düzenle</button>
+                        </div>
+                    </div>
                 </form>
+                    </div>
                 @endif
                 @else
                
@@ -43,16 +55,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kullanicilar as $kullanici)
+                        @foreach ($users as $user)
                         <tr>
-                            <th scope="row"> {{ $kullanici->id }} </th>
-                            <td> {{ $kullanici->name }} </td>
-                            <td> {{ $kullanici->email }} </td>
-                            <td> {{ $kullanici->yetki }} </td>
+                            <th scope="row"> {{ $user->id }} </th>
+                            <td> {{ $user->name }} </td>
+                            <td> {{ $user->email }} </td>
+                            <td> {{ $user->yetki }} </td>
                             <td>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <a href="{{route('kullanicilar.edit',$kullanici->id)}}" class="btn btn-sm btn-warning">Düzenle</a>
+                                        <a href="{{route('users.edit',$user->id)}}" class="btn btn-sm btn-warning">Düzenle</a>
                                     </div>
                                     
                                 </div>

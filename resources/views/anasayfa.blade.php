@@ -5,24 +5,24 @@
 <!--====== Banner Area Start ======-->
 <section class="banner-section">
     <div class="banner-slider">
-        @foreach ($onecikarilmis as $onecikan)
+        @foreach ($featuredPosts as $featuredPost)
         <div class="sinlge-banner">
             <div class="banner-wrapper">
-                <div class="banner-bg" style="background-image: url(images/{{$onecikan->resim}});"></div>
+                <div class="banner-bg" style="background-image: url(images/{{$featuredPost->image}});"></div>
                 <div class="banner-content" data-animation="fadeInUp" data-delay="0.3s">
                     <h3 class="title" data-animation="fadeInUp" data-delay="0.6s">
                         <a href="#">
-                            {{ $onecikan->baslik }}
+                            {{ $featuredPost->title }}
                         </a>
                     </h3>
                     <ul class="meta" data-animation="fadeInUp" data-delay="0.8s">
-                        <li><a href="#">{{ $onecikan->sahip->name }} yazdı</a></li>
-                        <li><a href="{{$onecikan->kategori->slug}}">{{ $onecikan->kategori->ad }}</a></li>
+                        <li><a href="#">{{ $featuredPost->user->name }} yazdı</a></li>
+                        <li><a href="{{$featuredPost->category->slug}}">{{ $featuredPost->category->name }}</a></li>
                     </ul>
                     <p data-animation="fadeInUp" data-delay="1s">
-                        {!! Str::limit($onecikan->icerik,'150')!!}
+                        {!! Str::limit($featuredPost->content,'150')!!}
                     </p>
-                    <a href="{{$onecikan->slug}}" class="read-more" data-animation="fadeInUp" data-delay="0.7s">
+                    <a href="{{$featuredPost->slug}}" class="read-more" data-animation="fadeInUp" data-delay="0.7s">
                         Devamını Oku <i class="fas fa-long-arrow-right"></i>
                     </a>
                 </div>
@@ -39,30 +39,30 @@
     <div class="container container-1250">
         <div class="post-area-inner">
             <div class="entry-posts two-column masonary-posts row">
-                @foreach ($yazilar as $yazi)
+                @foreach ($posts as $post)
                 <div class="col-lg-6 col-sm-6">
                     <div class="entry-post">
                         <div class="entry-thumbnail">
-                            <img src="images/{{$yazi->resim}}" alt="Image">
+                            <img src="images/{{$post->image}}" alt="Image">
                         </div>
                         <div class="entry-content">
                             <h4 class="title">
-                                <a href="{{$yazi->slug}}">
-                                    {{ $yazi->baslik }}
+                                <a href="{{$post->slug}}">
+                                    {{ $post->title }}
                                 </a>
                             </h4>
                             <ul class="post-meta">
                                 <li class="date">
-                                    <a> {{ $yazi->created_at }} </a>
+                                    <a> {{ $post->created_at }} </a>
                                 </li>
                                 <li class="categories">
-                                    <a href="{{$yazi->kategori->slug}}">{{ $yazi->kategori->ad }}</a>
+                                    <a href="{{$post->category->slug}}">{{ $post->category->name }}</a>
                                 </li>
                             </ul>
                             <p>
-                                {!!Str::limit($yazi->icerik,'150')!!}
+                                {!!Str::limit($post->content,'150')!!}
                             </p>
-                            <a href="{{$yazi->slug}}" class="read-more">
+                            <a href="{{$post->slug}}" class="read-more">
                                 Devamını Oku <i class="fas fa-long-arrow-right"></i>
                             </a>
                         </div>
@@ -71,7 +71,7 @@
                 @endforeach
                 <div class="col-12">
                     <div class="text-center">
-                        {{ $yazilar->links() }}
+                        {{ $posts->links() }}
                     </div>
                 </div>
             </div>
@@ -93,53 +93,27 @@
                     <div class="col-lg-12 col-md-6 col-sm-8 widget social-widget">
                         <h5 class="widget-title">Kategoriler</h5>
                         <div class="social-links">
-                            @foreach(App\Models\Kategoriler::all() as $kategori)
-                            <a href="kategori/{{$kategori->slug}}">
-                                {{ $kategori->ad }}
+                            @foreach($categories as $category)
+                            <a href="kategori/{{$category->slug}}">
+                                {{ $category->name }}
                             </a>
                             @endforeach
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-6 col-sm-8 widget popular-articles">
-                        <h5 class="widget-title">Popular Articles</h5>
+                        <h5 class="widget-title">En Çok Okunan Yazılar</h5>
                         <div class="articles">
+                            @foreach ($popularPosts as $post)
                             <div class="article">
                                 <div class="thumb">
-                                    <img src="assets/img/sidebar/articles/01.jpg" alt="Image">
+                                    <img src="images/{{$post->image}}" alt="Image">
                                 </div>
                                 <div class="desc">
-                                    <h6><a href="blog-details.html">Best Wordpress Theme of 2018</a></h6>
-                                    <span class="post-date">Audust 23, 2015</span>
+                                    <h6><a href="blog-details.html">{{ $post->title }}</a></h6>
+                                    <span class="post-date">{{$post->created_at->format('m:h d/M/y')}}</span>
                                 </div>
                             </div>
-                            <div class="article">
-                                <div class="thumb">
-                                    <img src="assets/img/sidebar/articles/02.jpg" alt="Image">
-                                </div>
-                                <div class="desc">
-                                    <h6><a href="blog-details.html">Dating While Studying Abroad—Maximize Fun
-                                            Minimize Heartbreak</a></h6>
-                                    <span class="post-date">Audust 23, 2015</span>
-                                </div>
-                            </div>
-                            <div class="article">
-                                <div class="thumb">
-                                    <img src="assets/img/sidebar/articles/03.jpg" alt="Image">
-                                </div>
-                                <div class="desc">
-                                    <h6><a href="blog-details.html">Nature Photography Best Place Focus</a></h6>
-                                    <span class="post-date">Audust 23, 2015</span>
-                                </div>
-                            </div>
-                            <div class="article">
-                                <div class="thumb">
-                                    <img src="assets/img/sidebar/articles/04.jpg" alt="Image">
-                                </div>
-                                <div class="desc">
-                                    <h6><a href="blog-details.html">Best Wordpress Theme of 2018</a></h6>
-                                    <span class="post-date">Audust 23, 2015</span>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-6 col-sm-8 widget ad-widget">

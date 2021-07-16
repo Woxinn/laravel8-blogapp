@@ -1,38 +1,32 @@
 @extends('layouts.app')
-@section('baslik',$yazi->baslik)
+@section('baslik',$post->title)
 
 
-@php
-App\Models\Yazilarmodel::find($yazi->id)->increment('okunmasayisi');
-
-@endphp
 @section('icerik')
 <!--====== Post Details Start ======-->
 <section class="post-details-area">
 	<div class="container container-1000">
 		<div class="post-details">
 			<div class="entry-header">
-				<h2 class="title"> {{ $yazi->baslik }} </h2>
+				<h2 class="title"> {{ $post->title }} </h2>
 				<ul class="post-meta">
-					<li>{{ $yazi->created_at }}</li>
-					<li><a href="#">{{ $yazi->kategori->ad }}</a></li>
+					<li>{{ $post->created_at }}</li>
+					<li><a href="{{ $post->category->slug }}">{{ $post->category->name }}</a></li>
 				</ul>
 				<p class="short-desc"> </p>
 			</div>
 			<div class="entry-media text-center">
-				<img src="images/{{$yazi->resim}}" alt="image">
+				<img src="images/{{$post->image}}" alt="image">
 			</div>
 			<div class="entry-content">
-				{!! $yazi->icerik !!}
+				{!! $post->content !!}
 			</div>
 			<div class="entry-footer">
 				<div class="post-tags">
-					<span>Tag:</span>
-					<a href="#">burger,</a>
-					<a href="#">pixxa,</a>
-					<a href="#">drink,</a>
-					<a href="#">hot,</a>
-					<a href="#">spacial,</a>
+					<span>Etiketler:</span>
+					@foreach (Str::of($post->tags)->explode(',') as $tag)						
+					<a href="#">{{$tag}}</a>
+					@endforeach
 				</div>
 				<div class="social-share">
 					<span>Share:</span>
@@ -45,8 +39,7 @@ App\Models\Yazilarmodel::find($yazi->id)->increment('okunmasayisi');
 					<div class="author-img">
 						<img src="assets/img/post-details/post-author.png" alt="PostAuthor">
 					</div>
-					<h5><a href="#">Maisha Smith</a></h5>
-					<p>Article Writer, Senior Designer, Wordpress Developer Father of 2 Daughters</p>
+					<h5><a href="#">{{$post->user->name}}</a></h5>
 				</div>
 			</div>
 			<div class="post-nav">
@@ -88,21 +81,28 @@ App\Models\Yazilarmodel::find($yazi->id)->increment('okunmasayisi');
 			</div>
 		</div>
 		<div class="comment-template">
-			<h4 class="template-title">{{ $yazi->yorumlar->count() }} Yorum</h4>
+			<h4 class="template-title">{{ $post->comments->count() }} Yorum</h4>
 
 			<ul class="comment-list">
-				@foreach ($yazi->yorumlar as $yorum)
+				@foreach ($post->comments as $comment)
 				<li>
 					<div class="comment-body">
 						<div class="comment-author">
 						</div>
 						<div class="comment-content">
-							<h6 class="comment-author">{{ $yorum->sahip->name }}</h6>
+							<h6 class="comment-author">{{ $comment->user->name }} {!! $comment->user->yetki == 'admin' ? '- <span style="color: red;font-size:14px;">Admin</span>' : '' !!}</h6>
 							<p>
-								{{ $yorum->yorum }}
+								{{ $comment->comment }}
 							</p>
 							<div class="comment-footer">
-								<span class="date"> {{ $yorum->created_at->format('h:m d M Y') }}</span>
+								<span class="date"> {{ $comment->created_at->format('h:m d M Y') }}</span>
+								@if (Auth::check() && Auth::user()->yetki == 'admin' || Auth::id() == $comment->user_id)
+								<form action="{{route('comment.destroy',$comment)}}" method="post">
+									@csrf
+									@method('delete')
+									<button type="submit" class="btn btn-sm btn-danger">Yorumu Sil</button>
+								</form>
+								@endif
 							</div>
 						</div>
 					</div>
@@ -112,13 +112,13 @@ App\Models\Yazilarmodel::find($yazi->id)->increment('okunmasayisi');
 
 			<h4 class="template-title">Yorum Bırakın</h4>
 			<div class="comment-form">
-				<form action="{{route('yorum.store')}}" method="POST">
+				<form action="{{route('comment.store')}}" method="POST">
 					@csrf
 					<div class="row">
 						<div class="col-12">
-							<textarea name="yorum" placeholder="Yorum"></textarea>
+							<textarea name="comment" placeholder="Yorum"></textarea>
 						</div>
-						<input type="hidden" name="yaziid" value="{{$yazi->id}}">
+						<input type="hidden" name="postId" value="{{$post->id}}">
 						<div class="col-12">
 							<button type="submit">Gönder <i class="far fa-arrow-right"></i></button>
 						</div>
